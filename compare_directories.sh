@@ -16,6 +16,15 @@ while [ $# -gt 0 ]; do
 			top_directory="$2"
 			shift
 			;;
+		"--minlevel")
+                        top_directory="$2"
+                        shift
+                        ;;
+		"--directory")
+                        top_directory="$2"
+                        shift
+                        ;;
+
 		*)
 
 	
