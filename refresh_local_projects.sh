@@ -1,7 +1,7 @@
 #!/bin/bash
 dbmanuser=root
 dbmanhost=itrac50044
-localpath=/root/
+localpath=/mnt/
 dbmanpath=/ORA/dbs01/syscontrol/projects
 
-rsync -av ${dbmanuser}@${dbmanhost}:${dbmanpath} $localpath
+rsync -av --delete ${dbmanuser}@${dbmanhost}:${dbmanpath} $localpath

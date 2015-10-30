@@ -7,6 +7,7 @@ xcopy=0
 xbuild=0
 xall=0
 xreinstall=0
+xdeploy=0
 
 while [ $# -gt 0 ]; do
 
@@ -32,6 +33,10 @@ while [ $# -gt 0 ]; do
 		"--reinstall")
 			xreinstall=1				
 		;;
+		"--deploy")
+			xdeploy=1				
+		;;
+
 
 	esac
 	shift
@@ -96,4 +101,7 @@ if [ $xreinstall -eq 1 ]; then
 	./reinstall_rpms.sh
 fi
 
+if [ $xdeploy -eq 1 ]; then
+	./deploy.sh
+fi
 

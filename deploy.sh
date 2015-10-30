@@ -3,6 +3,7 @@ xaddversion=0
 xgit=0
 xkoji=0
 xall=0
+xupdate=1
 
 while [ $# -gt 0 ]; do
 
@@ -22,6 +23,9 @@ while [ $# -gt 0 ]; do
 			xgit=1
 			xkoji=1
 			;;
+		"--all_projects")
+			xupdate=0
+			;;
 	esac
 
 	shift
@@ -30,7 +34,38 @@ done
 
 # Change release number in all specs
 
+
 specfiles=`find . -maxdepth 2 -type f -name *.spec`
+directories=`find . -mindepth 1 -maxdepth 1 -type d`
+
+if [ $xupdate -eq 1 ]; then
+	my_dir=`pwd`
+
+	new_directories=
+	for d in $directories; do
+		cd $d
+		status=`git status | grep "nothing to commit, working directory clean"`
+		if [ "$status" = "" ]; then
+			echo "CHANGED: $d"
+			new_directories="$new_directories $d"
+		fi
+		cd $my_dir
+
+	done
+
+	directories=$new_directories
+
+	specfiles=
+	for d in $directories; do
+		specs=`find $d -mindepth 1 -maxdepth 1 -name *.spec`
+		specfiles="$specfiles $specs"
+	done
+fi
+
+if [ "$directories" = "" ]; then
+	echo "Nothing to update, exit"
+	exit 0
+fi
 
 if [ $xaddversion -eq 1 ]; then
 	echo ">>>>>>>>> INCREASING VERSION NUMVER <<<<<<<<<"
@@ -49,7 +84,7 @@ if [ $xgit -eq 1 ]; then
 	# Git add all/ commit and push
 	echo ">>>>>>>>> GIT ADD COMMIT PUSH <<<<<<<<<"
 	my_dir=`pwd`
-	directories=`find . -mindepth 1 -maxdepth 1 -type d`
+
 
 	for d in $directories; do
 		echo "Git add commit and push in $d"
@@ -68,7 +103,6 @@ fi
 if [ $xkoji -eq 1 ]; then
 	echo ">>>>>>>>> GENERATE KOJI COMMANDS <<<<<<<<<<"
 	my_dir=`pwd`
-	directories=`find . -mindepth 1 -maxdepth 1 -type d`
 
 	for d in $directories; do
 		cd $d

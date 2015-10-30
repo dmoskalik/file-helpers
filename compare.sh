@@ -1,8 +1,8 @@
 
 dir1='/ORA/dbs01/syscontrol/projects'
-dir2='/root/packages/'
+dir2='/mnt/projects/'
 
-all_projects=`ls /root/projects`
+all_projects=`ls $dir2`
 
 for name in $all_projects; do
 results=`find $dir2 -maxdepth 2 -type d -name $name -exec echo "Found " {} \;`
@@ -13,4 +13,4 @@ done
 
 echo ""
 
-diff --brief -r /root/projects/ /ORA/dbs01/syscontrol/projects
+diff --brief -r $dir2 $dir1
